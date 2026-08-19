@@ -1,4 +1,4 @@
-# Component Library Working Model
+# Mithya Design-to-Development Working Model
 
 ## Purpose
 
@@ -8,21 +8,19 @@ Repos:
 
 - https://github.com/mithya-team/mithya-ui-libs
 - https://github.com/mithya-team/mithya-pilot-client
+- https://github.com/aniruddha-mithya/mithya-alt-client
 
-This document is the working contract for those two repos.
+This document is the working contract for those three repos.
 
 ## Repositories
 
-Web and React Native are packages in **one** lib repo. The client repo has two apps.
+Web and React Native are packages in **one** lib repo. There are **two client repos**. Pilot (`mithya-pilot-client`) uses `solid`/`ghost`. Alt (`mithya-alt-client`) uses a different theme and `filled`/`outline`/`soft`. Each client has `apps/web` and `apps/native`.
 
 | Repo | What it holds |
 |---|---|
 | https://github.com/mithya-team/mithya-ui-libs | `packages/web` (React + Tailwind), `packages/native` (React Native + Unistyles), registry JSON, playgrounds |
-| https://github.com/mithya-team/mithya-pilot-client | `apps/web`, `apps/native`, theme values, product components, locked `ui` copies, feature code |
-
-![Repos and install flow](images/repos.png)
-
-![Who edits which folders](images/roles.png)
+| https://github.com/mithya-team/mithya-pilot-client | First client: `apps/web`, `apps/native`, `solid` / `ghost` |
+| https://github.com/aniruddha-mithya/mithya-alt-client | Second client: `apps/web`, `apps/native`, `filled` / `outline` / `soft` |
 
 Generic libs own reusable primitives, public API, visual identity of those primitives, registry JSON, tags, changelogs.
 
@@ -45,9 +43,9 @@ Skill in that repo: `.cursor/skills/ui-lib-component/SKILL.md`.
 
 Do not put client theme **values** in lib component source. Libs own token **names** (`token-contract.json`).
 
-### Client designer — `mithya-pilot-client`
+### Client designer — client repos
 
-Owns `apps/web/src/theme`, `apps/native/src/theme`, and `apps/*/src/components/product`.
+Owns `apps/*/src/theme` and `apps/*/src/components/product` in **each** client repo (`mithya-pilot-client`, `mithya-alt-client`).
 
 1. Set color, space, type values in theme files.
 2. Build product-only UI under `src/components/product`.
@@ -57,16 +55,52 @@ Do not edit `apps/*/src/components/ui`.
 
 Skill in that repo: `.cursor/skills/client-ui-component/SKILL.md`.
 
+### Designer baseline
+
+Designers create reusable primitives in `mithya-ui-libs`. A primitive belongs
+here only when its behavior or visual language is reusable across product
+surfaces. Product copy, business rules, API calls, permissions, and real
+customer data stay in the client repo.
+
+Before implementation, record the purpose, platform, anatomy, public API,
+variants, states, accessibility behavior, responsive behavior, token names
+(primitive, semantic, or component), and automation hooks. The agent implements this brief. The designer
+accepts the result in the playground.
+
+Use `docs/designer-component-workflow.md` for the full baseline and
+acceptance checklist.
+
+### Client designer sandbox
+
+The client repo has an explicit designer sandbox:
+
+| Path | Purpose |
+|---|---|
+| `apps/*/src/components/product/**` | Product components and composition |
+| `apps/*/src/theme/**` | Client-owned token values |
+| `apps/*/src/theme/variants/**` | CVA (web) or Unistyles variants (native) |
+| `apps/*/src/design-sandbox/**` | Typed mock data and preview screens |
+
+Designers add product designs in unlocked paths. The sandbox uses deterministic
+mock scenarios and test hooks. It must not call APIs, write storage, or contain
+business logic. Sandbox notes: `mithya-pilot-client/docs/designer-sandbox.md` and `mithya-alt-client/docs/designer-sandbox.md`.
+
+The designer loop is: change product UI, update theme or variant recipes, add or update a mock scenario, review
+important states, run the platform smoke test, and record accepted states in
+the pull request.
+
 ## How developers work
 
-### Client developer — `mithya-pilot-client`
+### Client developer — client repos
 
-Package manager is **pnpm**. Do not run `npm i`. `npm i` re-runs Unistyles `prepare` (`bob build`) and fails.
+Same commands in `mithya-pilot-client` and `mithya-alt-client`. Package manager is **pnpm**. Do not run `npm i`.
 
 ```bash
 pnpm install
 pnpm ui:init
 pnpm ui:sync
+pnpm test:shadcn
+pnpm typecheck
 pnpm --filter web dev
 pnpm --filter native ios
 ```
@@ -80,6 +114,29 @@ Native Unistyles uses Nitro. Use a **dev client** (`expo run:ios`). Expo Go is n
 ### Lib developer / agent — `mithya-ui-libs`
 
 Same rules as lib designer for source. Follow `.cursor/skills/ui-lib-component/SKILL.md`.
+
+## Designer-to-developer handoff
+
+### Reusable primitive
+
+1. Designer records the component brief.
+2. Agent implements the primitive in the lib repo.
+3. Designer reviews all playground states and accepts the visual contract.
+4. Lib developer rebuilds the registry and creates an immutable tag.
+5. Client developer bumps the pin and runs `pnpm ui:sync`.
+
+### Product UI
+
+1. Designer builds the product component in the client repo.
+2. Designer adds a typed mock scenario in `apps/*/src/design-sandbox`.
+3. Designer reviews web and native screens and runs the smoke tests.
+4. Developer keeps the visual contract and replaces mock data at the feature boundary.
+5. Developer adds real data fetching, mutations, validation, permissions,
+   routing, and business rules in feature code.
+
+Mock data proves the visual and interaction contract. It does not prove API or
+business behavior. Developers must add integration and data tests for the real
+flow.
 
 ## What we are not doing
 
@@ -110,7 +167,7 @@ pnpm dlx shadcn registry add @mithya-native=https://mithya-team.github.io/mithya
 
 Pilot registry server in `mithya-ui-libs`: `pnpm serve` → `http://127.0.0.1:3333/web/v0.1.0/{name}.json` (same for `/native/`).
 
-Bump version = change the pin in `components.json` (or `ui:init --version v1.3.0`), then `pnpm ui:sync` with `UI-Reason: refresh`.
+Bump version = change the pin in `components.json` (or `ui:init --version v1.3.0`), then `pnpm ui:sync`.
 
 Public lib repo is the source. GitHub Pages (not yet enabled) or `pnpm serve` for JSON. No npm publish of components. No official shadcn directory PR.
 
@@ -122,58 +179,65 @@ Native items set explicit `files[].target`. Native `components.json` may use emp
 
 ## Folder contract in the client repo
 
-Paths are per app (`apps/web`, `apps/native`):
+Paths are per client repo. Each client has `apps/web` and `apps/native`:
 
 | Path | Owner | Git |
 |---|---|---|
-| `src/components/ui/**` | Generic lib via CLI | Locked |
-| `ui.lock.json` | Generated by `ui:sync` | Locked |
+| `src/components/ui/**` | Generic lib via `shadcn add` (`pnpm ui:sync`) | Locked |
 | `src/theme/**` | Client designer | Unlocked |
 | `src/components/product/**` | Client designer | Unlocked |
 | Feature / page code | Client developer | Unlocked |
 
 Do not put product components in `src/components/ui`.
 
-## Theme split
+## Theme and variant split
 
-Libs own **semantic token names**. Client owns **values**.
+Client owns **theme values** at three levels and **variant recipes**. Libs own the primitive **template**. Recipes and product UI may use primitive, semantic, or component token names. Hex/rgb/hsl lives only in primitive value definitions.
 
-Web: client `src/theme/theme.css` defines CSS variables. Installed components use semantic Tailwind utilities only (`bg-surface`, `text-fg-muted`). Copied files live under `src/components/ui`, so Tailwind scans them in-repo.
+| Level | What it changes | Web | Native |
+|---|---|---|---|
+| Primitive | Raw palette | `--primitive-*` in `theme.css` | `primitive` in `tokens.ts` |
+| Semantic | Meaning aliases | `--semantic-*` | `colors`, `space`, `radius` |
+| Component | One component only | `--button-*`, `--input-*` | `component.button`, `component.input` |
 
-Native: client `src/theme/unistyles.ts` calls `StyleSheet.configure` once, before any UI import (`apps/native/index.ts` imports it first). Theme objects `satisfies NativeTheme`. Components use `StyleSheet.create((theme) => …)` and semantic keys only.
+Change `--primitive-blue-600` to retint every alias that points at it. Change `--semantic-bg-accent` to retint accent uses without editing the palette. Change `--button-solid-bg` to retint solid buttons only.
 
-Registry may ship a type/contract file (`native-theme.ts`) that is locked. It must not ship filled color/spacing values. Values stay in unlocked `src/theme/`.
+Locked primitives import `../../theme/variants/<name>` after `shadcn add` (relative, so the CLI does not rewrite `@/` to `@/components/ui/<name>`). They do not define solid/ghost visuals.
 
-Light, dark, system: the **app** selects the mode. Components consume the configured theme.
+| Platform | Theme values | Variant recipes |
+|---|---|---|
+| Web | `apps/web/src/theme/theme.css` | CVA in `apps/web/src/theme/variants/<name>.ts` |
+| Native | `apps/native/src/theme/tokens.ts` + `unistyles.ts` | Unistyles `variants` + `use<Name>Variants` in `apps/native/src/theme/variants/<name>.ts` |
+
+Web recipes may use `bg-primitive-blue-600`, `bg-accent`, or `bg-button-solid`. Native recipes may use `theme.primitive.blue600`, `theme.colors.bg.accent`, or `theme.component.button.solidBg`. Copied files live under `src/components/ui`, so Tailwind scans them in-repo.
+
+Native: client `src/theme/unistyles.ts` calls `StyleSheet.configure` once, before any UI import (`apps/native/index.ts` imports it first).
+
+Registry may ship a type/contract file (`native-theme.ts`) that is locked. It must not ship filled color values. Values stay in unlocked `src/theme/`. Variant recipes are never copied by `shadcn add`.
+
+Light, dark, system: the **app** selects the mode. Components consume the configured theme. Variant recipes read those theme values.
+
+Lib playgrounds ship demo recipes at the same `@/theme/variants/<name>` path so the template can run. Client files replace them.
 
 ## As-is rule (copy model)
 
-shadcn copy does not give as-is by default. Integrity is:
+shadcn copy can transform files. The pin is the registry URL in `components.json` (`v0.1.0` in the path). Do not hand-edit `src/components/ui`.
 
-1. `ui.lock.json` — item, version, path, sha256.
-2. `pre-commit` — `src/components/ui/**` changes allowed only with `UI_SYNC=1` and hash verify.
-3. `commit-msg` — UI commits are UI-only (those files + `ui.lock.json`). Message trailers required.
-4. `pnpm verify:ui` — **refetch** the pinned registry artifact and diff. Local lock is a cache.
+Integrity is:
 
-`git commit --no-verify` is why CI refetch exists.
+1. Pin in `components.json`.
+2. `pre-commit` — `src/components/ui/**` changes allowed only with `UI_SYNC=1`.
+3. `commit-msg` — UI commits may include `src/components/ui` and `components.json` only.
 
-### `pnpm ui:sync`
+`pnpm ui:sync` is a wrapper for `shadcn add --yes --overwrite`. From the repo root it runs in every app with `components.json`. From an app directory it runs in that app.
 
-Fetches the pinned items, writes files, writes `ui.lock.json`, prints the commit command.
-
-Legitimate reasons only:
-
-- `first-install`
-- `refresh` (version bump or re-copy of the same pin)
-
-```
-ui(web): button@v0.1.0
-
-UI-Reason: first-install
-UI-Version: v0.1.0
+```bash
+pnpm ui:sync
+pnpm --filter web ui:sync
+pnpm ui:sync button
 ```
 
-Hook rejects mixed commits (feature code + `ui/`). Hook rejects UI commits without trailers. Hook rejects hash mismatch.
+Legitimate reasons: first install, or refresh after a pin bump.
 
 ## Process — create or update a component
 
@@ -190,7 +254,7 @@ Follow `.cursor/skills/ui-lib-component/SKILL.md`.
 5. Git tag
 6. Client pin bump + `pnpm ui:sync` + UI-only commit
 
-### Product-only (`mithya-pilot-client`)
+### Product-only (client repos)
 
 Follow `.cursor/skills/client-ui-component/SKILL.md`.
 
@@ -198,7 +262,7 @@ Add files under `src/components/product` or change `src/theme`. No tag. No `ui:s
 
 ## Platform implementations
 
-Separate libs. No shared component source. Shared semantic token **names** where useful.
+Separate libs. No shared component source. Shared token **names** where useful.
 
 - Web: React + Tailwind CSS.
 - Native: React Native + Unistyles.
@@ -209,6 +273,7 @@ Unistyles rules:
 
 - `StyleSheet.configure` once in client theme, before UI imports.
 - `StyleSheet.create` for ordinary styles.
+- Primitive variants: `StyleSheet.create` + `use<Name>Variants` in `src/theme/variants/<name>.ts`. The locked template calls that hook.
 - Do not use `useUnistyles` for ordinary styling.
 - Do not add a second theme provider.
 
@@ -274,15 +339,16 @@ Registry items declare npm deps the CLI must install (Unistyles, Phosphor, …).
 
 Lib agents (in `mithya-ui-libs`):
 
-- Semantic tokens only. No hex/rgb/hsl, no arbitrary visual Tailwind, no primitive token names in component source.
+- No raw hex/rgb/hsl in templates or recipes. Token names may be primitive, semantic, or component.
 - No root `className`/`style` escape hatches.
-- New need → variant/prop in the lib, not a one-off in a consumer.
+- New visual variant → CVA / Unistyles recipe in the client `src/theme/variants`.
+- New primitive behavior or template API → change in the lib, then tag and `ui:sync`.
 - Load `.cursor/skills/ui-lib-component/SKILL.md`.
 
-Client agents (in `mithya-pilot-client`):
+Client agents (in `mithya-pilot-client` and `mithya-alt-client`):
 
 - Do not edit `src/components/ui/**`.
-- Theme and product UI only in unlocked paths.
+- Theme, variant recipes, and product UI only in unlocked paths.
 - Install via `pnpm ui:sync`, never by hand-copy.
 - Load `.cursor/skills/client-ui-component/SKILL.md`.
 
@@ -294,20 +360,24 @@ Formatting is not a quality gate.
 
 - Playground review before tag.
 - `pnpm build:registry` produces `registry/web|native/v*/{name}.json`.
-- Semantic tokens only in component source.
+- No raw hex in recipes. Token names may be primitive, semantic, or component.
 
-### `mithya-pilot-client`
+### Client repos
+
+Same in `mithya-pilot-client` and `mithya-alt-client`.
 
 `scripts/check-ui-lock.sh` on pre-commit:
 
 - UI staged paths only with `UI_SYNC=1`.
-- Hashes match refetch of `components.json` pins.
-- Commit trailers `UI-Reason` + `UI-Version`.
 - Theme/product paths unrestricted by this script.
 
-Web smoke: `pnpm --filter web test:e2e` (Playwright).
+`scripts/check-ui-commit-msg.sh`: UI commits may include `src/components/ui` and `components.json` only.
 
-Native smoke: Maestro `apps/native/maestro/smoke.yaml` on the iOS simulator after `pnpm --filter native ios`.
+Web smoke (pilot): `pnpm --filter web test:e2e` (Playwright).
+
+Native smoke (pilot): Maestro `apps/native/maestro/smoke.yaml` on the iOS simulator after `pnpm --filter native ios`.
+
+Alt client: `pnpm test:shadcn` and `pnpm typecheck`. Native alt has no iOS prebuild in this pilot.
 
 ## Issues, releases, support
 
@@ -342,9 +412,10 @@ Tags are immutable. Old tags stay installable. Only latest gets fixes. Client pi
 Greenfield. Repos are public.
 
 - Lib: https://github.com/mithya-team/mithya-ui-libs — `packages/web`, `packages/native`, registry JSON, `pnpm serve` on `127.0.0.1:3333`
-- Client: https://github.com/mithya-team/mithya-pilot-client — `apps/web`, `apps/native`, `ui:sync`, lock hooks
+- First client: https://github.com/mithya-team/mithya-pilot-client — `solid` / `ghost`
+- Second client: https://github.com/aniruddha-mithya/mithya-alt-client — `filled` / `outline` / `soft`
 
-Attack tests (web + native): edit `ui/button` → verify fail; forged lock hashes → refetch fail; theme/product edit → pass; mixed ui+feature without `UI_SYNC` → hook fail.
+Attack tests (web + native): edit `ui/button` without `UI_SYNC=1` → hook fail; theme/product edit → pass; mixed ui+feature → hook fail.
 
 Pass: product/theme can change; generic UI cannot, except by versioned sync commit.
 
@@ -363,5 +434,5 @@ GitHub item address (optional): `mithya-team/mithya-ui-libs/...#tag` only after 
 | Role | Access |
 |---|---|
 | Lib designer | Write https://github.com/mithya-team/mithya-ui-libs ; tag after playground review |
-| Everyone else | Clone https://github.com/mithya-team/mithya-pilot-client ; `ui:init` once, then `shadcn add @mithya-web/button` |
+| Everyone else | Clone a client (`mithya-pilot-client` or `mithya-alt-client`); `ui:init` once, then `pnpm ui:sync` / `shadcn add @mithya-web/button` |
 | Client CI | Public fetch; no registry PAT |
