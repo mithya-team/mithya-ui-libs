@@ -1,0 +1,17 @@
+flowchart TB
+  subgraph libs [mithya-ui-libs]
+    webLib["packages/web React plus Tailwind"]
+    rnLib["packages/native React Native plus Unistyles"]
+  end
+  subgraph client [mithya-pilot-client]
+    theme["apps web and native src/theme"]
+    product["apps web and native src/components/product"]
+    ui["apps web and native src/components/ui locked"]
+    app["feature code"]
+  end
+  webLib -->|"pnpm ui:sync then shadcn add @mithya-web/button"| ui
+  rnLib -->|"pnpm ui:sync then shadcn add @mithya-native/button"| ui
+  theme --> product
+  theme --> app
+  ui --> app
+  product --> app

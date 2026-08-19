@@ -2,6 +2,8 @@
 
 Generic Mithya UI libs (web + React Native) and local shadcn registry JSON.
 
+Contract: `docs/working-model.md`. Agent process: `.cursor/skills/ui-lib-component/SKILL.md`.
+
 ## Serve registry
 
 ```bash

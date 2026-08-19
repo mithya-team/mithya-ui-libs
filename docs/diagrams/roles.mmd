@@ -1,0 +1,10 @@
+flowchart LR
+  libDesigner[Lib designer] --> libsRepo[mithya-ui-libs]
+  clientDesigner[Client designer] --> themeProduct[theme and product folders]
+  clientDev[Client developer] --> features[feature code]
+  clientDev --> sync[pnpm ui:sync]
+  libsRepo --> sync
+  sync --> lockedUi[locked src/components/ui]
+  themeProduct --> screens[product screens]
+  features --> screens
+  lockedUi --> screens

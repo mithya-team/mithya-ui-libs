@@ -1,0 +1,9 @@
+flowchart TD
+  need[New or changed reusable primitive] --> issue[GitHub issue on mithya-ui-libs]
+  issue --> impl[Implement in packages/web or packages/native]
+  impl --> play[Playground review]
+  play --> registry[pnpm build:registry]
+  registry --> tag[Immutable git tag]
+  tag --> pin[Client bumps pin in components.json]
+  pin --> sync[pnpm ui:sync]
+  sync --> commit[UI-only commit with UI-Reason and UI-Version]
