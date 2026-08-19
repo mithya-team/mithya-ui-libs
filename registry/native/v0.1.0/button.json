@@ -1,0 +1,29 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "button",
+  "type": "registry:ui",
+  "title": "Button",
+  "dependencies": [
+    "react-native-unistyles"
+  ],
+  "files": [
+    {
+      "path": "button.tsx",
+      "type": "registry:ui",
+      "target": "src/components/ui/button.tsx",
+      "content": "import * as React from \"react\"\nimport { Pressable, Text, type GestureResponderEvent } from \"react-native\"\nimport { StyleSheet } from \"react-native-unistyles\"\nimport { layoutToStyle, type LayoutProps } from \"./layout\"\nimport type { NativeTheme } from \"./native-theme\"\n\nexport type ButtonVariant = \"solid\" | \"ghost\"\nexport type ButtonSize = \"md\"\n\nexport type ButtonProps = {\n  children?: React.ReactNode\n  variant?: ButtonVariant\n  size?: ButtonSize\n  disabled?: boolean\n  layout?: LayoutProps\n  onPress?: (event: GestureResponderEvent) => void\n}\n\nconst styles = StyleSheet.create((theme: NativeTheme) => ({\n  root: {\n    flexDirection: \"row\",\n    alignItems: \"center\",\n    justifyContent: \"center\",\n    paddingHorizontal: theme.space.control.px,\n    paddingVertical: theme.space.control.py,\n    gap: theme.space.control.gap,\n    borderRadius: theme.radius.control,\n    borderWidth: 1,\n    borderColor: theme.colors.border.default,\n  },\n  solid: {\n    backgroundColor: theme.colors.bg.accent,\n  },\n  ghost: {\n    backgroundColor: \"transparent\",\n  },\n  disabled: {\n    opacity: theme.opacity.disabled,\n  },\n  solidLabel: {\n    color: theme.colors.fg.onAccent,\n    fontSize: theme.typography.label.fontSize,\n  },\n  ghostLabel: {\n    color: theme.colors.fg.default,\n    fontSize: theme.typography.label.fontSize,\n  },\n}))\n\nexport function Button({\n  children,\n  variant = \"solid\",\n  size: _size = \"md\",\n  disabled,\n  layout,\n  onPress,\n}: ButtonProps) {\n  return (\n    <Pressable\n      accessibilityRole=\"button\"\n      disabled={disabled}\n      onPress={onPress}\n      style={[\n        styles.root,\n        variant === \"solid\" ? styles.solid : styles.ghost,\n        disabled ? styles.disabled : undefined,\n        layoutToStyle(layout),\n      ]}\n    >\n      <Text style={variant === \"solid\" ? styles.solidLabel : styles.ghostLabel}>\n        {children}\n      </Text>\n    </Pressable>\n  )\n}\n"
+    },
+    {
+      "path": "layout.ts",
+      "type": "registry:ui",
+      "target": "src/components/ui/layout.ts",
+      "content": "import type { ViewStyle } from \"react-native\"\n\nexport type LayoutProps = {\n  margin?: ViewStyle[\"margin\"]\n  width?: ViewStyle[\"width\"]\n  maxWidth?: ViewStyle[\"maxWidth\"]\n}\n\nexport function layoutToStyle(layout?: LayoutProps): ViewStyle | undefined {\n  if (!layout) return undefined\n  const style: ViewStyle = {}\n  if (layout.margin !== undefined) style.margin = layout.margin\n  if (layout.width !== undefined) style.width = layout.width\n  if (layout.maxWidth !== undefined) style.maxWidth = layout.maxWidth\n  return Object.keys(style).length > 0 ? style : undefined\n}\n"
+    },
+    {
+      "path": "native-theme.ts",
+      "type": "registry:ui",
+      "target": "src/components/ui/native-theme.ts",
+      "content": "export type NativeTheme = {\n  colors: {\n    bg: {\n      surface: string\n      accent: string\n      muted: string\n    }\n    fg: {\n      default: string\n      muted: string\n      onAccent: string\n    }\n    border: {\n      default: string\n      focus: string\n    }\n  }\n  space: {\n    control: {\n      px: number\n      py: number\n      gap: number\n    }\n  }\n  radius: {\n    control: number\n  }\n  typography: {\n    label: {\n      fontSize: number\n    }\n  }\n  opacity: {\n    disabled: number\n  }\n}\n\n/** Lib playground demo only. Client apps must supply their own theme values. */\nexport const defaultDemoTheme = {\n  colors: {\n    bg: {\n      surface: \"#ffffff\",\n      accent: \"#18181b\",\n      muted: \"#f4f4f5\",\n    },\n    fg: {\n      default: \"#18181b\",\n      muted: \"#71717a\",\n      onAccent: \"#fafafa\",\n    },\n    border: {\n      default: \"#e4e4e7\",\n      focus: \"#2563eb\",\n    },\n  },\n  space: {\n    control: {\n      px: 12,\n      py: 8,\n      gap: 8,\n    },\n  },\n  radius: {\n    control: 8,\n  },\n  typography: {\n    label: {\n      fontSize: 14,\n    },\n  },\n  opacity: {\n    disabled: 0.5,\n  },\n} satisfies NativeTheme\n"
+    }
+  ]
+}

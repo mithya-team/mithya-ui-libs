@@ -1,0 +1,23 @@
+# mithya-ui-libs
+
+Generic Mithya UI libs (web + React Native) and local shadcn registry JSON.
+
+## Serve registry
+
+```bash
+pnpm install
+pnpm build:registry
+pnpm serve
+```
+
+- Web: `http://127.0.0.1:3333/web/v0.1.0/{name}.json`
+- Native: `http://127.0.0.1:3333/native/v0.1.0/{name}.json`
+
+Items: `button`, `input`. Token **names** are in `token-contract.json`. Values live in the client app.
+
+## Packages
+
+- `packages/web` — React + Tailwind (playground included)
+- `packages/native` — React Native + Unistyles
+
+Do not put client theme values in locked component source.

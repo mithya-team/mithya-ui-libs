@@ -1,0 +1,59 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "mithya-native",
+  "homepage": "http://127.0.0.1:3333/native",
+  "items": [
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "button",
+      "type": "registry:ui",
+      "title": "Button",
+      "dependencies": [
+        "react-native-unistyles"
+      ],
+      "files": [
+        {
+          "path": "button.tsx",
+          "type": "registry:ui",
+          "target": "src/components/ui/button.tsx"
+        },
+        {
+          "path": "layout.ts",
+          "type": "registry:ui",
+          "target": "src/components/ui/layout.ts"
+        },
+        {
+          "path": "native-theme.ts",
+          "type": "registry:ui",
+          "target": "src/components/ui/native-theme.ts"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "input",
+      "type": "registry:ui",
+      "title": "Input",
+      "dependencies": [
+        "react-native-unistyles"
+      ],
+      "files": [
+        {
+          "path": "input.tsx",
+          "type": "registry:ui",
+          "target": "src/components/ui/input.tsx"
+        },
+        {
+          "path": "layout.ts",
+          "type": "registry:ui",
+          "target": "src/components/ui/layout.ts"
+        },
+        {
+          "path": "native-theme.ts",
+          "type": "registry:ui",
+          "target": "src/components/ui/native-theme.ts"
+        }
+      ]
+    }
+  ]
+}

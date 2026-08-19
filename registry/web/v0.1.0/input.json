@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "input",
+  "type": "registry:ui",
+  "title": "Input",
+  "files": [
+    {
+      "path": "input.tsx",
+      "type": "registry:ui",
+      "target": "src/components/ui/input.tsx",
+      "content": "import * as React from \"react\"\nimport { layoutToStyle, type LayoutProps } from \"./layout\"\n\nexport type InputProps = {\n  value?: string\n  defaultValue?: string\n  name?: string\n  type?: React.HTMLInputTypeAttribute\n  placeholder?: string\n  disabled?: boolean\n  layout?: LayoutProps\n  onChange?: React.ChangeEventHandler<HTMLInputElement>\n}\n\nconst inputClassName =\n  \"bg-surface text-fg-default text-label px-control py-control rounded-control border border-default placeholder:text-fg-muted focus-visible:border-focus focus-visible:outline-none disabled:opacity-disabled\"\n\nexport const Input = React.forwardRef<HTMLInputElement, InputProps>(\n  function Input(\n    {\n      value,\n      defaultValue,\n      name,\n      type = \"text\",\n      placeholder,\n      disabled,\n      layout,\n      onChange,\n    },\n    ref,\n  ) {\n    return (\n      <input\n        ref={ref}\n        value={value}\n        defaultValue={defaultValue}\n        name={name}\n        type={type}\n        placeholder={placeholder}\n        disabled={disabled}\n        onChange={onChange}\n        className={inputClassName}\n        style={layoutToStyle(layout)}\n      />\n    )\n  },\n)\n"
+    },
+    {
+      "path": "layout.ts",
+      "type": "registry:ui",
+      "target": "src/components/ui/layout.ts",
+      "content": "import type { CSSProperties } from \"react\"\n\nexport type LayoutProps = {\n  margin?: CSSProperties[\"margin\"]\n  width?: CSSProperties[\"width\"]\n  maxWidth?: CSSProperties[\"maxWidth\"]\n}\n\nexport function layoutToStyle(layout?: LayoutProps): CSSProperties | undefined {\n  if (!layout) return undefined\n  const style: CSSProperties = {}\n  if (layout.margin !== undefined) style.margin = layout.margin\n  if (layout.width !== undefined) style.width = layout.width\n  if (layout.maxWidth !== undefined) style.maxWidth = layout.maxWidth\n  return Object.keys(style).length > 0 ? style : undefined\n}\n"
+    }
+  ]
+}

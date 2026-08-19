@@ -1,0 +1,45 @@
+/* Lib-demo theme only. Client apps own theme values. */
+@import "tailwindcss";
+
+:root {
+  --color-bg-surface: #ffffff;
+  --color-bg-accent: #18181b;
+  --color-bg-muted: #f4f4f5;
+  --color-fg-default: #18181b;
+  --color-fg-muted: #71717a;
+  --color-fg-on-accent: #fafafa;
+  --color-border-default: #e4e4e7;
+  --color-border-focus: #2563eb;
+  --space-control-px: 0.75rem;
+  --space-control-py: 0.5rem;
+  --space-control-gap: 0.5rem;
+  --radius-control: 0.5rem;
+  --text-label: 0.875rem;
+  --opacity-disabled: 0.5;
+}
+
+@theme inline {
+  --color-surface: var(--color-bg-surface);
+  --color-accent: var(--color-bg-accent);
+  --color-muted: var(--color-bg-muted);
+  --color-fg-default: var(--color-fg-default);
+  --color-fg-muted: var(--color-fg-muted);
+  --color-fg-on-accent: var(--color-fg-on-accent);
+  --color-default: var(--color-border-default);
+  --color-focus: var(--color-border-focus);
+  --radius-control: var(--radius-control);
+  --text-label: var(--text-label);
+  --opacity-disabled: var(--opacity-disabled);
+}
+
+@utility px-control {
+  padding-inline: var(--space-control-px);
+}
+
+@utility py-control {
+  padding-block: var(--space-control-py);
+}
+
+@utility gap-control {
+  gap: var(--space-control-gap);
+}

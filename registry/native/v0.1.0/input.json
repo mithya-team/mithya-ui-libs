@@ -1,0 +1,29 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "input",
+  "type": "registry:ui",
+  "title": "Input",
+  "dependencies": [
+    "react-native-unistyles"
+  ],
+  "files": [
+    {
+      "path": "input.tsx",
+      "type": "registry:ui",
+      "target": "src/components/ui/input.tsx",
+      "content": "import * as React from \"react\"\nimport { TextInput } from \"react-native\"\nimport { StyleSheet } from \"react-native-unistyles\"\nimport { layoutToStyle, type LayoutProps } from \"./layout\"\nimport type { NativeTheme } from \"./native-theme\"\n\nexport type InputProps = {\n  value?: string\n  defaultValue?: string\n  placeholder?: string\n  disabled?: boolean\n  layout?: LayoutProps\n  onChangeText?: (text: string) => void\n}\n\nconst styles = StyleSheet.create((theme: NativeTheme) => ({\n  root: {\n    backgroundColor: theme.colors.bg.surface,\n    color: theme.colors.fg.default,\n    fontSize: theme.typography.label.fontSize,\n    paddingHorizontal: theme.space.control.px,\n    paddingVertical: theme.space.control.py,\n    borderRadius: theme.radius.control,\n    borderWidth: 1,\n    borderColor: theme.colors.border.default,\n  },\n  disabled: {\n    opacity: theme.opacity.disabled,\n  },\n}))\n\nexport function Input({\n  value,\n  defaultValue,\n  placeholder,\n  disabled,\n  layout,\n  onChangeText,\n}: InputProps) {\n  return (\n    <TextInput\n      value={value}\n      defaultValue={defaultValue}\n      placeholder={placeholder}\n      editable={!disabled}\n      onChangeText={onChangeText}\n      style={[\n        styles.root,\n        disabled ? styles.disabled : undefined,\n        layoutToStyle(layout),\n      ]}\n    />\n  )\n}\n"
+    },
+    {
+      "path": "layout.ts",
+      "type": "registry:ui",
+      "target": "src/components/ui/layout.ts",
+      "content": "import type { ViewStyle } from \"react-native\"\n\nexport type LayoutProps = {\n  margin?: ViewStyle[\"margin\"]\n  width?: ViewStyle[\"width\"]\n  maxWidth?: ViewStyle[\"maxWidth\"]\n}\n\nexport function layoutToStyle(layout?: LayoutProps): ViewStyle | undefined {\n  if (!layout) return undefined\n  const style: ViewStyle = {}\n  if (layout.margin !== undefined) style.margin = layout.margin\n  if (layout.width !== undefined) style.width = layout.width\n  if (layout.maxWidth !== undefined) style.maxWidth = layout.maxWidth\n  return Object.keys(style).length > 0 ? style : undefined\n}\n"
+    },
+    {
+      "path": "native-theme.ts",
+      "type": "registry:ui",
+      "target": "src/components/ui/native-theme.ts",
+      "content": "export type NativeTheme = {\n  colors: {\n    bg: {\n      surface: string\n      accent: string\n      muted: string\n    }\n    fg: {\n      default: string\n      muted: string\n      onAccent: string\n    }\n    border: {\n      default: string\n      focus: string\n    }\n  }\n  space: {\n    control: {\n      px: number\n      py: number\n      gap: number\n    }\n  }\n  radius: {\n    control: number\n  }\n  typography: {\n    label: {\n      fontSize: number\n    }\n  }\n  opacity: {\n    disabled: number\n  }\n}\n\n/** Lib playground demo only. Client apps must supply their own theme values. */\nexport const defaultDemoTheme = {\n  colors: {\n    bg: {\n      surface: \"#ffffff\",\n      accent: \"#18181b\",\n      muted: \"#f4f4f5\",\n    },\n    fg: {\n      default: \"#18181b\",\n      muted: \"#71717a\",\n      onAccent: \"#fafafa\",\n    },\n    border: {\n      default: \"#e4e4e7\",\n      focus: \"#2563eb\",\n    },\n  },\n  space: {\n    control: {\n      px: 12,\n      py: 8,\n      gap: 8,\n    },\n  },\n  radius: {\n    control: 8,\n  },\n  typography: {\n    label: {\n      fontSize: 14,\n    },\n  },\n  opacity: {\n    disabled: 0.5,\n  },\n} satisfies NativeTheme\n"
+    }
+  ]
+}

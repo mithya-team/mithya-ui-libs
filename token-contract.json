@@ -1,0 +1,19 @@
+{
+  "version": "v0.1.0",
+  "semantic": {
+    "color.bg.surface": { "web": "--color-bg-surface", "tw": "bg-surface", "native": "colors.bg.surface" },
+    "color.bg.accent": { "web": "--color-bg-accent", "tw": "bg-accent", "native": "colors.bg.accent" },
+    "color.bg.muted": { "web": "--color-bg-muted", "tw": "bg-muted", "native": "colors.bg.muted" },
+    "color.fg.default": { "web": "--color-fg-default", "tw": "text-fg-default", "native": "colors.fg.default" },
+    "color.fg.muted": { "web": "--color-fg-muted", "tw": "text-fg-muted", "native": "colors.fg.muted" },
+    "color.fg.on-accent": { "web": "--color-fg-on-accent", "tw": "text-fg-on-accent", "native": "colors.fg.onAccent" },
+    "color.border.default": { "web": "--color-border-default", "tw": "border-default", "native": "colors.border.default" },
+    "color.border.focus": { "web": "--color-border-focus", "tw": "border-focus", "native": "colors.border.focus" },
+    "space.control.px": { "web": "--space-control-px", "tw": "px-control", "native": "space.control.px" },
+    "space.control.py": { "web": "--space-control-py", "tw": "py-control", "native": "space.control.py" },
+    "space.control.gap": { "web": "--space-control-gap", "tw": "gap-control", "native": "space.control.gap" },
+    "radius.control": { "web": "--radius-control", "tw": "rounded-control", "native": "radius.control" },
+    "typography.label": { "web": "--text-label", "tw": "text-label", "native": "typography.label" },
+    "opacity.disabled": { "web": "--opacity-disabled", "tw": "opacity-disabled", "native": "opacity.disabled" }
+  }
+}

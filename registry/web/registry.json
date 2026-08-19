@@ -1,0 +1,43 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "mithya-web",
+  "homepage": "http://127.0.0.1:3333/web",
+  "items": [
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "button",
+      "type": "registry:ui",
+      "title": "Button",
+      "files": [
+        {
+          "path": "button.tsx",
+          "type": "registry:ui",
+          "target": "src/components/ui/button.tsx"
+        },
+        {
+          "path": "layout.ts",
+          "type": "registry:ui",
+          "target": "src/components/ui/layout.ts"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "input",
+      "type": "registry:ui",
+      "title": "Input",
+      "files": [
+        {
+          "path": "input.tsx",
+          "type": "registry:ui",
+          "target": "src/components/ui/input.tsx"
+        },
+        {
+          "path": "layout.ts",
+          "type": "registry:ui",
+          "target": "src/components/ui/layout.ts"
+        }
+      ]
+    }
+  ]
+}
