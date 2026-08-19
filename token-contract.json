@@ -1,19 +1,37 @@
 {
   "version": "v0.1.0",
+  "layers": ["primitive", "semantic", "component"],
+  "primitive": {
+    "white": { "web": "--primitive-white", "tw": "bg-primitive-white", "native": "primitive.white" },
+    "gray.50": { "web": "--primitive-gray-50", "tw": "bg-primitive-gray-50", "native": "primitive.gray50" },
+    "gray.200": { "web": "--primitive-gray-200", "tw": "bg-primitive-gray-200", "native": "primitive.gray200" },
+    "gray.500": { "web": "--primitive-gray-500", "tw": "bg-primitive-gray-500", "native": "primitive.gray500" },
+    "gray.900": { "web": "--primitive-gray-900", "tw": "bg-primitive-gray-900", "native": "primitive.gray900" },
+    "blue.600": { "web": "--primitive-blue-600", "tw": "bg-primitive-blue-600", "native": "primitive.blue600" }
+  },
   "semantic": {
-    "color.bg.surface": { "web": "--color-bg-surface", "tw": "bg-surface", "native": "colors.bg.surface" },
-    "color.bg.accent": { "web": "--color-bg-accent", "tw": "bg-accent", "native": "colors.bg.accent" },
-    "color.bg.muted": { "web": "--color-bg-muted", "tw": "bg-muted", "native": "colors.bg.muted" },
-    "color.fg.default": { "web": "--color-fg-default", "tw": "text-fg-default", "native": "colors.fg.default" },
-    "color.fg.muted": { "web": "--color-fg-muted", "tw": "text-fg-muted", "native": "colors.fg.muted" },
-    "color.fg.on-accent": { "web": "--color-fg-on-accent", "tw": "text-fg-on-accent", "native": "colors.fg.onAccent" },
-    "color.border.default": { "web": "--color-border-default", "tw": "border-default", "native": "colors.border.default" },
-    "color.border.focus": { "web": "--color-border-focus", "tw": "border-focus", "native": "colors.border.focus" },
-    "space.control.px": { "web": "--space-control-px", "tw": "px-control", "native": "space.control.px" },
-    "space.control.py": { "web": "--space-control-py", "tw": "py-control", "native": "space.control.py" },
-    "space.control.gap": { "web": "--space-control-gap", "tw": "gap-control", "native": "space.control.gap" },
-    "radius.control": { "web": "--radius-control", "tw": "rounded-control", "native": "radius.control" },
-    "typography.label": { "web": "--text-label", "tw": "text-label", "native": "typography.label" },
-    "opacity.disabled": { "web": "--opacity-disabled", "tw": "opacity-disabled", "native": "opacity.disabled" }
+    "color.bg.surface": { "web": "--semantic-bg-surface", "tw": "bg-surface", "native": "colors.bg.surface" },
+    "color.bg.accent": { "web": "--semantic-bg-accent", "tw": "bg-accent", "native": "colors.bg.accent" },
+    "color.bg.muted": { "web": "--semantic-bg-muted", "tw": "bg-muted", "native": "colors.bg.muted" },
+    "color.fg.default": { "web": "--semantic-fg-default", "tw": "text-fg-default", "native": "colors.fg.default" },
+    "color.fg.muted": { "web": "--semantic-fg-muted", "tw": "text-fg-muted", "native": "colors.fg.muted" },
+    "color.fg.on-accent": { "web": "--semantic-fg-on-accent", "tw": "text-fg-on-accent", "native": "colors.fg.onAccent" },
+    "color.border.default": { "web": "--semantic-border-default", "tw": "border-default", "native": "colors.border.default" },
+    "color.border.focus": { "web": "--semantic-border-focus", "tw": "border-focus", "native": "colors.border.focus" },
+    "space.control.px": { "web": "--semantic-space-control-px", "tw": "px-control", "native": "space.control.px" },
+    "space.control.py": { "web": "--semantic-space-control-py", "tw": "py-control", "native": "space.control.py" },
+    "space.control.gap": { "web": "--semantic-space-control-gap", "tw": "gap-control", "native": "space.control.gap" },
+    "radius.control": { "web": "--semantic-radius-control", "tw": "rounded-control", "native": "radius.control" },
+    "typography.label": { "web": "--semantic-text-label", "tw": "text-label", "native": "typography.label" },
+    "opacity.disabled": { "web": "--semantic-opacity-disabled", "tw": "opacity-disabled", "native": "opacity.disabled" }
+  },
+  "component": {
+    "button.solid.bg": { "web": "--button-solid-bg", "tw": "bg-button-solid", "native": "component.button.solidBg" },
+    "button.solid.fg": { "web": "--button-solid-fg", "tw": "text-button-solid-fg", "native": "component.button.solidFg" },
+    "button.ghost.bg": { "web": "--button-ghost-bg", "tw": "bg-button-ghost", "native": "component.button.ghostBg" },
+    "button.ghost.fg": { "web": "--button-ghost-fg", "tw": "text-button-ghost-fg", "native": "component.button.ghostFg" },
+    "input.bg": { "web": "--input-bg", "tw": "bg-input", "native": "component.input.bg" },
+    "input.fg": { "web": "--input-fg", "tw": "text-input-fg", "native": "component.input.fg" },
+    "input.border": { "web": "--input-border", "tw": "border-input", "native": "component.input.border" }
   }
 }

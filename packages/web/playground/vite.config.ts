@@ -9,4 +9,9 @@ const playground = dirname(fileURLToPath(import.meta.url))
 export default defineConfig({
   root: playground,
   plugins: [react(), tailwindcss()],
+  resolve: {
+    alias: {
+      "@": playground,
+    },
+  },
 })

@@ -3,12 +3,15 @@
   "name": "input",
   "type": "registry:ui",
   "title": "Input",
+  "dependencies": [
+    "class-variance-authority"
+  ],
   "files": [
     {
       "path": "input.tsx",
       "type": "registry:ui",
       "target": "src/components/ui/input.tsx",
-      "content": "import * as React from \"react\"\nimport { layoutToStyle, type LayoutProps } from \"./layout\"\n\nexport type InputProps = {\n  value?: string\n  defaultValue?: string\n  name?: string\n  type?: React.HTMLInputTypeAttribute\n  placeholder?: string\n  disabled?: boolean\n  layout?: LayoutProps\n  onChange?: React.ChangeEventHandler<HTMLInputElement>\n}\n\nconst inputClassName =\n  \"bg-surface text-fg-default text-label px-control py-control rounded-control border border-default placeholder:text-fg-muted focus-visible:border-focus focus-visible:outline-none disabled:opacity-disabled\"\n\nexport const Input = React.forwardRef<HTMLInputElement, InputProps>(\n  function Input(\n    {\n      value,\n      defaultValue,\n      name,\n      type = \"text\",\n      placeholder,\n      disabled,\n      layout,\n      onChange,\n    },\n    ref,\n  ) {\n    return (\n      <input\n        ref={ref}\n        value={value}\n        defaultValue={defaultValue}\n        name={name}\n        type={type}\n        placeholder={placeholder}\n        disabled={disabled}\n        onChange={onChange}\n        className={inputClassName}\n        style={layoutToStyle(layout)}\n      />\n    )\n  },\n)\n"
+      "content": "import * as React from \"react\"\nimport { inputVariants, type InputVariantProps } from \"../../theme/variants/input\"\nimport { layoutToStyle, type LayoutProps } from \"./layout\"\n\nexport type InputProps = {\n  value?: string\n  defaultValue?: string\n  name?: string\n  type?: React.HTMLInputTypeAttribute\n  placeholder?: string\n  layout?: LayoutProps\n  onChange?: React.ChangeEventHandler<HTMLInputElement>\n} & InputVariantProps\n\nexport const Input = React.forwardRef<HTMLInputElement, InputProps>(\n  function Input(\n    {\n      value,\n      defaultValue,\n      name,\n      type = \"text\",\n      placeholder,\n      disabled,\n      layout,\n      onChange,\n    },\n    ref,\n  ) {\n    return (\n      <input\n        ref={ref}\n        value={value}\n        defaultValue={defaultValue}\n        name={name}\n        type={type}\n        placeholder={placeholder}\n        disabled={Boolean(disabled)}\n        onChange={onChange}\n        className={inputVariants({ disabled })}\n        style={layoutToStyle(layout)}\n      />\n    )\n  },\n)\n"
     },
     {
       "path": "layout.ts",

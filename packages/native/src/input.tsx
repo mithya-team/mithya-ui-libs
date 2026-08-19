@@ -1,33 +1,16 @@
 import * as React from "react"
 import { TextInput } from "react-native"
-import { StyleSheet } from "react-native-unistyles"
+import type { UnistylesVariants } from "react-native-unistyles"
+import { inputStyles, useInputVariants } from "@/theme/variants/input"
 import { layoutToStyle, type LayoutProps } from "./layout"
-import type { NativeTheme } from "./native-theme"
 
 export type InputProps = {
   value?: string
   defaultValue?: string
   placeholder?: string
-  disabled?: boolean
   layout?: LayoutProps
   onChangeText?: (text: string) => void
-}
-
-const styles = StyleSheet.create((theme: NativeTheme) => ({
-  root: {
-    backgroundColor: theme.colors.bg.surface,
-    color: theme.colors.fg.default,
-    fontSize: theme.typography.label.fontSize,
-    paddingHorizontal: theme.space.control.px,
-    paddingVertical: theme.space.control.py,
-    borderRadius: theme.radius.control,
-    borderWidth: 1,
-    borderColor: theme.colors.border.default,
-  },
-  disabled: {
-    opacity: theme.opacity.disabled,
-  },
-}))
+} & UnistylesVariants<typeof inputStyles>
 
 export function Input({
   value,
@@ -37,6 +20,10 @@ export function Input({
   layout,
   onChangeText,
 }: InputProps) {
+  useInputVariants({
+    disabled,
+  })
+
   return (
     <TextInput
       value={value}
@@ -44,11 +31,7 @@ export function Input({
       placeholder={placeholder}
       editable={!disabled}
       onChangeText={onChangeText}
-      style={[
-        styles.root,
-        disabled ? styles.disabled : undefined,
-        layoutToStyle(layout),
-      ]}
+      style={[inputStyles.root, layoutToStyle(layout)]}
     />
   )
 }

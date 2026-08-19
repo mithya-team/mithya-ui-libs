@@ -2,7 +2,8 @@
 
 No Vite/RN app in this package. Unistyles needs `react-native`.
 
-Demo theme: `defaultDemoTheme` in `../src/native-theme.ts` (lib-demo only).
+Demo variant recipes: `theme/variants/button.ts` and `theme/variants/input.ts`.
+Client apps replace these via `@/theme/variants/<name>`.
 
 Configure once in the host app, before Button/Input imports:
 

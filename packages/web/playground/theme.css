@@ -1,45 +1,83 @@
-/* Lib-demo theme only. Client apps own theme values. */
+/* Lib-demo theme only. Client apps own theme values. Hex only in primitive. */
 @import "tailwindcss";
 
 :root {
-  --color-bg-surface: #ffffff;
-  --color-bg-accent: #18181b;
-  --color-bg-muted: #f4f4f5;
-  --color-fg-default: #18181b;
-  --color-fg-muted: #71717a;
-  --color-fg-on-accent: #fafafa;
-  --color-border-default: #e4e4e7;
-  --color-border-focus: #2563eb;
-  --space-control-px: 0.75rem;
-  --space-control-py: 0.5rem;
-  --space-control-gap: 0.5rem;
-  --radius-control: 0.5rem;
-  --text-label: 0.875rem;
-  --opacity-disabled: 0.5;
+  --primitive-white: #ffffff;
+  --primitive-gray-50: #f4f4f5;
+  --primitive-gray-200: #e4e4e7;
+  --primitive-gray-500: #71717a;
+  --primitive-gray-900: #18181b;
+  --primitive-blue-600: #2563eb;
+
+  --semantic-bg-surface: var(--primitive-white);
+  --semantic-bg-accent: var(--primitive-gray-900);
+  --semantic-bg-muted: var(--primitive-gray-50);
+  --semantic-fg-default: var(--primitive-gray-900);
+  --semantic-fg-muted: var(--primitive-gray-500);
+  --semantic-fg-on-accent: var(--primitive-white);
+  --semantic-border-default: var(--primitive-gray-200);
+  --semantic-border-focus: var(--primitive-blue-600);
+  --semantic-space-control-px: 0.75rem;
+  --semantic-space-control-py: 0.5rem;
+  --semantic-space-control-gap: 0.5rem;
+  --semantic-radius-control: 0.5rem;
+  --semantic-text-label: 0.875rem;
+  --semantic-opacity-disabled: 0.5;
+
+  --button-solid-bg: var(--semantic-bg-accent);
+  --button-solid-fg: var(--semantic-fg-on-accent);
+  --button-ghost-bg: transparent;
+  --button-ghost-fg: var(--semantic-fg-default);
+  --input-bg: var(--semantic-bg-surface);
+  --input-fg: var(--semantic-fg-default);
+  --input-border: var(--semantic-border-default);
 }
 
 @theme inline {
-  --color-surface: var(--color-bg-surface);
-  --color-accent: var(--color-bg-accent);
-  --color-muted: var(--color-bg-muted);
-  --color-fg-default: var(--color-fg-default);
-  --color-fg-muted: var(--color-fg-muted);
-  --color-fg-on-accent: var(--color-fg-on-accent);
-  --color-default: var(--color-border-default);
-  --color-focus: var(--color-border-focus);
-  --radius-control: var(--radius-control);
-  --text-label: var(--text-label);
-  --opacity-disabled: var(--opacity-disabled);
+  --color-primitive-white: var(--primitive-white);
+  --color-primitive-gray-50: var(--primitive-gray-50);
+  --color-primitive-gray-200: var(--primitive-gray-200);
+  --color-primitive-gray-500: var(--primitive-gray-500);
+  --color-primitive-gray-900: var(--primitive-gray-900);
+  --color-primitive-blue-600: var(--primitive-blue-600);
+
+  --color-surface: var(--semantic-bg-surface);
+  --color-accent: var(--semantic-bg-accent);
+  --color-muted: var(--semantic-bg-muted);
+  --color-fg-default: var(--semantic-fg-default);
+  --color-fg-muted: var(--semantic-fg-muted);
+  --color-fg-on-accent: var(--semantic-fg-on-accent);
+  --color-default: var(--semantic-border-default);
+  --color-focus: var(--semantic-border-focus);
+
+  --color-button-solid: var(--button-solid-bg);
+  --color-button-solid-fg: var(--button-solid-fg);
+  --color-button-ghost: var(--button-ghost-bg);
+  --color-button-ghost-fg: var(--button-ghost-fg);
+  --color-input: var(--input-bg);
+  --color-input-fg: var(--input-fg);
+  --color-input-border: var(--input-border);
+
+  --radius-control: var(--semantic-radius-control);
+  --text-label: var(--semantic-text-label);
 }
 
 @utility px-control {
-  padding-inline: var(--space-control-px);
+  padding-inline: var(--semantic-space-control-px);
 }
 
 @utility py-control {
-  padding-block: var(--space-control-py);
+  padding-block: var(--semantic-space-control-py);
 }
 
 @utility gap-control {
-  gap: var(--space-control-gap);
+  gap: var(--semantic-space-control-gap);
+}
+
+@utility opacity-disabled {
+  opacity: var(--semantic-opacity-disabled);
+}
+
+@utility border-input {
+  border-color: var(--input-border);
 }

@@ -26,6 +26,7 @@ const items = [
       { src: "packages/web/src/button.tsx", path: "button.tsx" },
       { src: "packages/web/src/layout.ts", path: "layout.ts" },
     ],
+    dependencies: ["class-variance-authority"],
   },
   {
     platform: "web",
@@ -35,6 +36,7 @@ const items = [
       { src: "packages/web/src/input.tsx", path: "input.tsx" },
       { src: "packages/web/src/layout.ts", path: "layout.ts" },
     ],
+    dependencies: ["class-variance-authority"],
   },
   {
     platform: "native",
@@ -60,6 +62,11 @@ const items = [
   },
 ]
 
+function toClientSource(content) {
+  // shadcn rewrites `@/theme/variants/button` → `@/components/ui/button`.
+  return content.replaceAll("@/theme/variants/", "../../theme/variants/")
+}
+
 function toItemJson(spec) {
   return {
     $schema: "https://ui.shadcn.com/schema/registry-item.json",
@@ -71,7 +78,7 @@ function toItemJson(spec) {
       path: file.path,
       type: "registry:ui",
       target: `src/components/ui/${file.path}`,
-      content: readFileSync(join(root, file.src), "utf8"),
+      content: toClientSource(readFileSync(join(root, file.src), "utf8")),
     })),
   }
 }

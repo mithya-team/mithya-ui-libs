@@ -3,12 +3,15 @@
   "name": "button",
   "type": "registry:ui",
   "title": "Button",
+  "dependencies": [
+    "class-variance-authority"
+  ],
   "files": [
     {
       "path": "button.tsx",
       "type": "registry:ui",
       "target": "src/components/ui/button.tsx",
-      "content": "import * as React from \"react\"\nimport { layoutToStyle, type LayoutProps } from \"./layout\"\n\nexport type ButtonVariant = \"solid\" | \"ghost\"\nexport type ButtonSize = \"md\"\n\nexport type ButtonProps = {\n  children?: React.ReactNode\n  variant?: ButtonVariant\n  size?: ButtonSize\n  disabled?: boolean\n  layout?: LayoutProps\n  type?: \"button\" | \"submit\" | \"reset\"\n  onClick?: React.MouseEventHandler<HTMLButtonElement>\n}\n\nconst baseClassName =\n  \"inline-flex items-center justify-center text-label px-control py-control rounded-control gap-control border border-default cursor-pointer disabled:opacity-disabled disabled:pointer-events-none focus-visible:border-focus focus-visible:outline-none\"\n\nconst variantClassName: Record<ButtonVariant, string> = {\n  solid: \"bg-accent text-fg-on-accent\",\n  ghost: \"text-fg-default\",\n}\n\nexport const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(\n  function Button(\n    {\n      children,\n      variant = \"solid\",\n      size: _size = \"md\",\n      disabled,\n      layout,\n      type = \"button\",\n      onClick,\n    },\n    ref,\n  ) {\n    return (\n      <button\n        ref={ref}\n        type={type}\n        disabled={disabled}\n        onClick={onClick}\n        className={`${baseClassName} ${variantClassName[variant]}`}\n        style={layoutToStyle(layout)}\n      >\n        {children}\n      </button>\n    )\n  },\n)\n"
+      "content": "import * as React from \"react\"\nimport { buttonVariants, type ButtonVariantProps } from \"../../theme/variants/button\"\nimport { layoutToStyle, type LayoutProps } from \"./layout\"\n\nexport type ButtonProps = {\n  children?: React.ReactNode\n  layout?: LayoutProps\n  type?: \"button\" | \"submit\" | \"reset\"\n  onClick?: React.MouseEventHandler<HTMLButtonElement>\n} & ButtonVariantProps\n\nexport const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(\n  function Button(\n    {\n      children,\n      variant,\n      size,\n      disabled,\n      layout,\n      type = \"button\",\n      onClick,\n    },\n    ref,\n  ) {\n    return (\n      <button\n        ref={ref}\n        type={type}\n        disabled={Boolean(disabled)}\n        onClick={onClick}\n        className={buttonVariants({ variant, size, disabled })}\n        style={layoutToStyle(layout)}\n      >\n        {children}\n      </button>\n    )\n  },\n)\n"
     },
     {
       "path": "layout.ts",

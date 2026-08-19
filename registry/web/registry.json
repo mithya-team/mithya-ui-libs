@@ -8,6 +8,9 @@
       "name": "button",
       "type": "registry:ui",
       "title": "Button",
+      "dependencies": [
+        "class-variance-authority"
+      ],
       "files": [
         {
           "path": "button.tsx",
@@ -26,6 +29,9 @@
       "name": "input",
       "type": "registry:ui",
       "title": "Input",
+      "dependencies": [
+        "class-variance-authority"
+      ],
       "files": [
         {
           "path": "input.tsx",

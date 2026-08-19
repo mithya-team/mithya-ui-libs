@@ -1,4 +1,5 @@
 import * as React from "react"
+import { inputVariants, type InputVariantProps } from "@/theme/variants/input"
 import { layoutToStyle, type LayoutProps } from "./layout"
 
 export type InputProps = {
@@ -7,13 +8,9 @@ export type InputProps = {
   name?: string
   type?: React.HTMLInputTypeAttribute
   placeholder?: string
-  disabled?: boolean
   layout?: LayoutProps
   onChange?: React.ChangeEventHandler<HTMLInputElement>
-}
-
-const inputClassName =
-  "bg-surface text-fg-default text-label px-control py-control rounded-control border border-default placeholder:text-fg-muted focus-visible:border-focus focus-visible:outline-none disabled:opacity-disabled"
+} & InputVariantProps
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
   function Input(
@@ -37,9 +34,9 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         name={name}
         type={type}
         placeholder={placeholder}
-        disabled={disabled}
+        disabled={Boolean(disabled)}
         onChange={onChange}
-        className={inputClassName}
+        className={inputVariants({ disabled })}
         style={layoutToStyle(layout)}
       />
     )
