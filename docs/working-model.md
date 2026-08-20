@@ -50,6 +50,7 @@ Owns `apps/*/src/theme` and `apps/*/src/components/product` in **each** client r
 1. Set color, space, type values in theme files.
 2. Build product-only UI under `src/components/product`.
 3. Compose screens from locked primitives + product components.
+4. Review tokens and variants in Storybook (`pnpm --filter web storybook` or `pnpm --filter native storybook`).
 
 Do not edit `apps/*/src/components/ui`.
 
@@ -79,15 +80,25 @@ The client repo has an explicit designer sandbox:
 | `apps/*/src/components/product/**` | Product components and composition |
 | `apps/*/src/theme/**` | Client-owned token values |
 | `apps/*/src/theme/variants/**` | CVA (web) or Unistyles variants (native) |
-| `apps/*/src/design-sandbox/**` | Typed mock data and preview screens |
+| `apps/*/src/design-sandbox/**` | Typed mock data, preview screens, theme swatches |
+| `apps/*/src/stories/**` | Storybook stories for theme, product, and sandbox |
+| `apps/web/.storybook/**` | Web Storybook config |
+| `apps/native/.rnstorybook/**` | On-device Storybook config |
 
 Designers add product designs in unlocked paths. The sandbox uses deterministic
 mock scenarios and test hooks. It must not call APIs, write storage, or contain
 business logic. Sandbox notes: `mithya-pilot-client/docs/designer-sandbox.md` and `mithya-alt-client/docs/designer-sandbox.md`.
 
-The designer loop is: change product UI, update theme or variant recipes, add or update a mock scenario, review
-important states, run the platform smoke test, and record accepted states in
-the pull request.
+Storybook is the designer review surface for **client theme and product UI**. Lib primitives stay in the lib playgrounds. Do not put stories under `src/components/ui`.
+
+| App | Command | Notes |
+|---|---|---|
+| Pilot web | `pnpm --filter web storybook` | `http://127.0.0.1:6006` |
+| Alt web | `pnpm --filter web storybook` | `http://127.0.0.1:6007` |
+| Pilot native | `pnpm --filter native storybook` | `STORYBOOK_ENABLED=true` swaps the Expo entry. Needs a rebuilt **dev client** after Storybook native deps. |
+| Alt native | `pnpm --filter native storybook` | Same entry swap. Alt native is typecheck-only until you prebuild. |
+
+The designer loop is: change product UI, update theme or variant recipes, add or update a mock scenario and Storybook story, review tokens and variants in Storybook, run the platform smoke test against the app sandbox, and record accepted states in the pull request.
 
 ## How developers work
 
@@ -101,7 +112,9 @@ pnpm ui:init
 pnpm ui:sync
 pnpm test:shadcn
 pnpm typecheck
+pnpm --filter web storybook
 pnpm --filter web dev
+pnpm --filter native storybook
 pnpm --filter native ios
 ```
 
@@ -129,9 +142,10 @@ Same rules as lib designer for source. Follow `.cursor/skills/ui-lib-component/S
 
 1. Designer builds the product component in the client repo.
 2. Designer adds a typed mock scenario in `apps/*/src/design-sandbox`.
-3. Designer reviews web and native screens and runs the smoke tests.
-4. Developer keeps the visual contract and replaces mock data at the feature boundary.
-5. Developer adds real data fetching, mutations, validation, permissions,
+3. Designer adds or updates stories in `apps/*/src/stories` (tokens, variants, product, sandbox).
+4. Designer reviews web Storybook and native on-device Storybook, then runs the smoke tests.
+5. Developer keeps the visual contract and replaces mock data at the feature boundary.
+6. Developer adds real data fetching, mutations, validation, permissions,
    routing, and business rules in feature code.
 
 Mock data proves the visual and interaction contract. It does not prove API or
@@ -186,6 +200,8 @@ Paths are per client repo. Each client has `apps/web` and `apps/native`:
 | `src/components/ui/**` | Generic lib via `shadcn add` (`pnpm ui:sync`) | Locked |
 | `src/theme/**` | Client designer | Unlocked |
 | `src/components/product/**` | Client designer | Unlocked |
+| `src/design-sandbox/**` | Client designer | Unlocked |
+| `src/stories/**` | Client designer | Unlocked. Not under `ui/`. |
 | Feature / page code | Client developer | Unlocked |
 
 Do not put product components in `src/components/ui`.
@@ -258,7 +274,7 @@ Follow `.cursor/skills/ui-lib-component/SKILL.md`.
 
 Follow `.cursor/skills/client-ui-component/SKILL.md`.
 
-Add files under `src/components/product` or change `src/theme`. No tag. No `ui:sync`.
+Add files under `src/components/product`, `src/theme`, `src/design-sandbox`, or `src/stories`. No tag. No `ui:sync`. Review in Storybook.
 
 ## Platform implementations
 
@@ -348,7 +364,7 @@ Lib agents (in `mithya-ui-libs`):
 Client agents (in `mithya-pilot-client` and `mithya-alt-client`):
 
 - Do not edit `src/components/ui/**`.
-- Theme, variant recipes, and product UI only in unlocked paths.
+- Theme, variant recipes, product UI, and Storybook stories only in unlocked paths.
 - Install via `pnpm ui:sync`, never by hand-copy.
 - Load `.cursor/skills/client-ui-component/SKILL.md`.
 
@@ -369,9 +385,13 @@ Same in `mithya-pilot-client` and `mithya-alt-client`.
 `scripts/check-ui-lock.sh` on pre-commit:
 
 - UI staged paths only with `UI_SYNC=1`.
-- Theme/product paths unrestricted by this script.
+- Theme/product/story paths unrestricted by this script.
 
 `scripts/check-ui-commit-msg.sh`: UI commits may include `src/components/ui` and `components.json` only.
+
+Web Storybook: `pnpm --filter web storybook` (pilot `:6006`, alt `:6007`).
+
+Native Storybook: `pnpm --filter native storybook` (`STORYBOOK_ENABLED=true`). Rebuild the Expo **dev client** after adding Storybook native modules.
 
 Web smoke (pilot): `pnpm --filter web test:e2e` (Playwright).
 

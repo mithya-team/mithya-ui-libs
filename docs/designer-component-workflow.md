@@ -75,5 +75,6 @@ Stop lib work when the request is product-only. Put it in a client repo:
 - client theme values: `apps/*/src/theme`
 - primitive variant recipes: `apps/*/src/theme/variants`
 - mock scenarios: `apps/*/src/design-sandbox`
+- stories: `apps/*/src/stories`
 
 Do not create a generic primitive to solve a one-screen product need.
